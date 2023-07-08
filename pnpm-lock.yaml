@@ -20,24 +20,6 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
 
-  dist:
-    devDependencies:
-      '@types/node':
-        specifier: ^18.16.0
-        version: 18.16.0
-      commander:
-        specifier: ^10.0.1
-        version: 10.0.1
-      glob:
-        specifier: ^10.2.5
-        version: 10.2.5
-      openapi-typescript-codegen:
-        specifier: ^0.24.0
-        version: 0.24.0
-      typescript:
-        specifier: ^5.0.4
-        version: 5.0.4
-
   examples/react-app:
     dependencies:
       '@tanstack/react-query':
