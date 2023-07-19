@@ -62,23 +62,29 @@ export const createUseQuery = (
 									undefined,
 									undefined,
 									ts.factory.createIdentifier('params'),
-									undefined,
-									ts.factory.createIndexedAccessTypeNode(
-										ts.factory.createTypeReferenceNode(
-											ts.factory.createIdentifier('Parameters'),
-											[
-												ts.factory.createTypeQueryNode(
-													ts.factory.createQualifiedName(
-														ts.factory.createIdentifier(className),
-														ts.factory.createIdentifier(methodName)
-													)
+									!method.parameters || !method.parameters.length
+										? ts.factory.createToken(ts.SyntaxKind.QuestionToken)
+										: undefined,
+									!method.parameters || !method.parameters.length
+										? // never | null
+										  ts.factory.createTypeReferenceNode('null')
+										: // Parameters<typeof DefaultClient.findPets>[0]
+										  ts.factory.createIndexedAccessTypeNode(
+												ts.factory.createTypeReferenceNode(
+													ts.factory.createIdentifier('Parameters'),
+													[
+														ts.factory.createTypeQueryNode(
+															ts.factory.createQualifiedName(
+																ts.factory.createIdentifier(className),
+																ts.factory.createIdentifier(methodName)
+															)
+														),
+													]
 												),
-											]
-										),
-										ts.factory.createLiteralTypeNode(
-											ts.factory.createNumericLiteral('0')
-										)
-									)
+												ts.factory.createLiteralTypeNode(
+													ts.factory.createNumericLiteral('0')
+												)
+										  )
 								),
 
 								ts.factory.createParameterDeclaration(
@@ -197,7 +203,9 @@ export const createUseQuery = (
 												ts.factory.createIdentifier(methodName)
 											),
 											undefined,
-											[ts.factory.createIdentifier('params')]
+											method.parameters.length > 0
+												? [ts.factory.createIdentifier('params')]
+												: []
 										)
 									),
 									ts.factory.createIdentifier('options'),

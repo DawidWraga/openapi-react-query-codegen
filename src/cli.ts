@@ -41,7 +41,6 @@ program
 	.option('--postfixServices <value>', 'Service name postfix', 'Service')
 	.option('--postfixModels <value>', 'Modal name postfix')
 	.option('--request <value>', 'Path to custom request file')
-	.option('--useOptions', 'Use options or arguments functions', false)
 	.parse();
 
 const options = program.opts<CLIOptions>();
