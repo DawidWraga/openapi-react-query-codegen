@@ -1,47 +1,47 @@
 {
-  "name": "@7nohe/openapi-react-query-codegen",
-  "version": "0.4.0",
-  "description": "OpenAPI React Query Codegen",
-  "bin": {
-    "openapi-rq": "dist/src/cli.js"
-  },
-  "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "preview": "npm run build && npm -C examples/react-app run generate:api",
-    "prepublishOnly": "npm run build",
-    "release": "npx git-ensure -a && npx bumpp --commit --tag --push"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/7nohe/openapi-react-query-codegen.git"
-  },
-  "homepage": "https://github.com/7nohe/openapi-react-query-codegen",
-  "bugs": "https://github.com/7nohe/openapi-react-query-codegen/issues",
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "codegen",
-    "react-query",
-    "react",
-    "openapi",
-    "swagger",
-    "typescript",
-    "openapi-typescript-codegen"
-  ],
-  "author": "Daiki Urata (@7nohe)",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^18.16.0",
-    "commander": "^10.0.1",
-    "glob": "^10.2.5",
-    "openapi-typescript-codegen": "^0.24.0",
-    "typescript": "^5.0.4"
-  },
-  "peerDependencies": {
-    "commander": ">= 10 < 11",
-    "glob": ">= 10",
-    "openapi-typescript-codegen": "^0.24.0",
-    "typescript": ">= 4.8.3"
-  }
+	"name": "@davstack/openapi-react-query-codegen",
+	"version": "0.6.4",
+	"description": "OpenAPI React Query Codegen using --useOptions (fork from @7nohe/openapi-react-query-codegen)",
+	"bin": {
+		"openapi-rq": "dist/src/cli.js"
+	},
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"preview": "npm run build && npm -C examples/react-app run generate:api",
+		"prepublishOnly": "npm run build",
+		"release": "npx git-ensure -a && npx bumpp --commit --tag --push",
+		"publish": "npm publish --access public --no-git-checks"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/DawidWraga/openapi-react-query-codegen.git"
+	},
+	"homepage": "https://github.com/DawidWraga/openapi-react-query-codegen",
+	"files": [
+		"dist"
+	],
+	"keywords": [
+		"codegen",
+		"react-query",
+		"react",
+		"openapi",
+		"swagger",
+		"typescript",
+		"openapi-typescript-codegen"
+	],
+	"author": "Dawid Wraga",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^18.16.0",
+		"commander": "^10.0.1",
+		"glob": "^10.2.5",
+		"openapi-typescript-codegen": "^0.24.0",
+		"typescript": "^5.0.4"
+	},
+	"peerDependencies": {
+		"commander": ">= 10 < 11",
+		"glob": ">= 10",
+		"openapi-typescript-codegen": "^0.24.0",
+		"typescript": ">= 4.8.3"
+	}
 }
