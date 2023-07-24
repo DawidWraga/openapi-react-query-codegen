@@ -17,6 +17,10 @@ export async function generate(options: CLIOptions) {
 		httpClient: options.client,
 		output: openApiOutputPath,
 	});
-	const source = createSource(openApiOutputPath);
-	print(source, options);
+	const { queries, getQueryClient, prefetchQuery } =
+		createSource(openApiOutputPath);
+	print(queries, options);
+	print(getQueryClient, options, 'get-query-client.ts');
+	print(prefetchQuery, options, 'prefetch-query.tsx');
+	// print(get, options);
 }

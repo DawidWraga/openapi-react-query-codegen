@@ -11,7 +11,7 @@
 ## Install
 
 ```
-$ npm install -D @7nohe/openapi-react-query-codegen
+$ npm i -D @davstack/openapi-react-query-codegen
 ```
 
 ## Usage
@@ -92,7 +92,7 @@ function App() {
   // You can still use the auto-generated query key
   const { data } = useQuery([usePetServiceFindPetsByStatusKey], () => {
     // Do something here
-    
+  
     return PetService.findPetsByStatus(['available']);
   });
 
@@ -107,4 +107,5 @@ export default App;
 ```
 
 ## License
+
 MIT

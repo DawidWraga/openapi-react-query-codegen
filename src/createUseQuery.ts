@@ -1,14 +1,29 @@
 import ts from 'typescript';
 import { capitalizeFirstLetter } from './common';
-
+const factory = ts.factory;
 export const createUseQuery = (
 	node: ts.SourceFile,
 	className: string,
 	method: ts.MethodDeclaration
 ) => {
 	const methodName = method.name?.getText(node)!;
-	const customHookName = `use${className}${capitalizeFirstLetter(methodName)}`;
-	const queryKey = `${customHookName}Key`;
+	const fullName = `${className}${capitalizeFirstLetter(methodName)}`;
+	const customHookName = `use${fullName}`;
+	const queryKeyName = `QueryKey${fullName}`;
+	const queryKeyValue = ts.factory.createArrayLiteralExpression(
+		[
+			ts.factory.createStringLiteral(className),
+			ts.factory.createStringLiteral(methodName),
+		],
+		false
+	);
+
+	console.log({
+		className,
+		methodName,
+		customHookName,
+		queryKey: queryKeyValue,
+	});
 
 	const queryKeyGenericType = ts.factory.createTypeReferenceNode(
 		'TQueryKey',
@@ -18,18 +33,136 @@ export const createUseQuery = (
 		ts.factory.createKeywordTypeNode(ts.SyntaxKind.UnknownKeyword),
 	]);
 
+	const prefetchQuery = factory.createVariableStatement(
+		[factory.createToken(ts.SyntaxKind.ExportKeyword)],
+		factory.createVariableDeclarationList(
+			[
+				factory.createVariableDeclaration(
+					factory.createIdentifier('prefetch' + fullName),
+					undefined,
+					undefined,
+					factory.createArrowFunction(
+						[factory.createToken(ts.SyntaxKind.AsyncKeyword)],
+						undefined,
+						[
+							factory.createParameterDeclaration(
+								undefined,
+								undefined,
+								factory.createIdentifier('params'),
+								undefined,
+								factory.createIndexedAccessTypeNode(
+									factory.createTypeReferenceNode(
+										factory.createIdentifier('Parameters'),
+										[
+											factory.createTypeQueryNode(
+												factory.createQualifiedName(
+													factory.createIdentifier(className),
+													factory.createIdentifier(methodName)
+												),
+												undefined
+											),
+										]
+									),
+									factory.createLiteralTypeNode(
+										factory.createNumericLiteral('0')
+									)
+								),
+								undefined
+							),
+							factory.createParameterDeclaration(
+								undefined,
+								undefined,
+								factory.createObjectBindingPattern([
+									factory.createBindingElement(
+										undefined,
+										undefined,
+										factory.createIdentifier('queryKey'),
+										undefined
+									),
+								]),
+								undefined,
+								factory.createTypeLiteralNode([
+									factory.createPropertySignature(
+										undefined,
+										factory.createIdentifier('queryKey'),
+										factory.createToken(ts.SyntaxKind.QuestionToken),
+										factory.createUnionTypeNode([
+											factory.createKeywordTypeNode(
+												ts.SyntaxKind.StringKeyword
+											),
+											factory.createArrayTypeNode(
+												factory.createKeywordTypeNode(
+													ts.SyntaxKind.StringKeyword
+												)
+											),
+										])
+									),
+								]),
+								factory.createObjectLiteralExpression([], false)
+							),
+						],
+						undefined,
+						factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+						factory.createCallExpression(
+							factory.createIdentifier('prefetchQuery'),
+							undefined,
+							[
+								factory.createArrayLiteralExpression(
+									[
+										ts.factory.createSpreadElement(
+											ts.factory.createIdentifier(queryKeyName)
+										),
+										factory.createSpreadElement(
+											factory.createParenthesizedExpression(
+												factory.createBinaryExpression(
+													factory.createIdentifier('queryKey'),
+													factory.createToken(
+														ts.SyntaxKind.QuestionQuestionToken
+													),
+													factory.createArrayLiteralExpression(
+														[factory.createIdentifier('params')],
+														false
+													)
+												)
+											)
+										),
+									],
+									false
+								),
+								factory.createArrowFunction(
+									undefined,
+									undefined,
+									[],
+									undefined,
+									factory.createToken(ts.SyntaxKind.EqualsGreaterThanToken),
+									factory.createCallExpression(
+										factory.createPropertyAccessExpression(
+											factory.createIdentifier(className),
+											factory.createIdentifier(methodName)
+										),
+										undefined,
+										[factory.createIdentifier('params')]
+									)
+								),
+							]
+						)
+					)
+				),
+			],
+			ts.NodeFlags.Const
+		)
+	);
+
 	return [
 		ts.factory.createVariableStatement(
 			[ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
 			ts.factory.createVariableDeclarationList(
 				[
 					ts.factory.createVariableDeclaration(
-						ts.factory.createIdentifier(queryKey),
+						ts.factory.createIdentifier(queryKeyName),
 						undefined,
 						undefined,
-						ts.factory.createStringLiteral(
-							`${className}${capitalizeFirstLetter(methodName)}`
-						)
+						queryKeyValue
 					),
 				],
 				ts.NodeFlags.Const
@@ -172,7 +305,9 @@ export const createUseQuery = (
 								[
 									ts.factory.createArrayLiteralExpression(
 										[
-											ts.factory.createIdentifier(queryKey),
+											ts.factory.createSpreadElement(
+												ts.factory.createIdentifier(queryKeyName)
+											),
 											ts.factory.createSpreadElement(
 												ts.factory.createParenthesizedExpression(
 													ts.factory.createBinaryExpression(
@@ -217,5 +352,6 @@ export const createUseQuery = (
 				ts.NodeFlags.Const
 			)
 		),
+		prefetchQuery,
 	];
 };

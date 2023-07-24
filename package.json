@@ -1,6 +1,6 @@
 {
 	"name": "@davstack/openapi-react-query-codegen",
-	"version": "0.6.4",
+	"version": "0.7.0",
 	"description": "OpenAPI React Query Codegen using --useOptions (fork from @7nohe/openapi-react-query-codegen)",
 	"bin": {
 		"openapi-rq": "dist/src/cli.js"

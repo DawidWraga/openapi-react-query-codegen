@@ -1,7 +1,7 @@
 import ts from 'typescript';
 import { sync } from 'glob';
 import { extname, basename, join } from 'path';
-
+const factory = ts.factory;
 export const createImports = (generatedClientsPath: string) => {
 	const models = sync(
 		join(generatedClientsPath, 'models', '*.ts').replace(/\\/g, '/')
@@ -83,5 +83,21 @@ export const createImports = (generatedClientsPath: string) => {
 				undefined
 			);
 		}),
+		factory.createImportDeclaration(
+			undefined,
+			factory.createImportClause(
+				false,
+				undefined,
+				factory.createNamedImports([
+					factory.createImportSpecifier(
+						false,
+						undefined,
+						factory.createIdentifier('prefetchQuery')
+					),
+				])
+			),
+			factory.createStringLiteral('./prefetch-query'),
+			undefined
+		),
 	];
 };
